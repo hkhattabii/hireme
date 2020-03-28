@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "375969471102",
+    "firebase_url": "https://hireme-4f4ee.firebaseio.com",
+    "project_id": "hireme-4f4ee",
+    "storage_bucket": "hireme-4f4ee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:375969471102:android:f991d2516c96d7492c962f",
+        "android_client_info": {
+          "package_name": "com.example.hireme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "375969471102-e149t7qvdmhfmpqe534ovl35qtbet7vh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3hFLPRrEYinBrYgn_i-T7N2uDWi1njus"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "375969471102-e149t7qvdmhfmpqe534ovl35qtbet7vh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:375969471102:android:adbb12def5a81fbe2c962f",
+        "android_client_info": {
+          "package_name": "com.example.hireme_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "375969471102-e149t7qvdmhfmpqe534ovl35qtbet7vh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3hFLPRrEYinBrYgn_i-T7N2uDWi1njus"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "375969471102-e149t7qvdmhfmpqe534ovl35qtbet7vh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
