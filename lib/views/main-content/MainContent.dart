@@ -31,7 +31,7 @@ class _MainContentState extends State<MainContent> {
           child: Container(
               width: double.infinity,
               height: double.infinity,
-              child: currentPage == 0 ? FeedView(user: user) : currentPage == 1 ? NotificationView() : ProfileView()),
+              child: currentPage == 0 ? FeedView(user: user) : currentPage == 1 ? NotificationView() : ProfileView(user: user,)),
         ),
         bottomNavigationBar: BottomAppBar(
             child: Container(

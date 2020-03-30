@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hireme/blocs/authentication/authentication_bloc.dart';
 import 'package:hireme/blocs/feed/feed_bloc.dart';
+import 'package:hireme/blocs/profile/profile_bloc.dart';
 import 'package:hireme/blocs/registration/registration_bloc.dart';
 import 'package:hireme/views/home/LoginView.dart';
 import 'package:hireme/views/main-content/MainContent.dart';
@@ -20,6 +21,9 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider<FeedBloc>(
             create: (context) => FeedBloc(),
+          ),
+          BlocProvider<ProfileBloc>(
+            create: (context) => ProfileBloc(),
           )
         ],
         child: MaterialApp(

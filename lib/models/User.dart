@@ -20,7 +20,7 @@ class User {
     this._role = json["role"];
     this._certificate = json["certificate"];
     this._experience = json["experience"];
-    this._platforms = json["platforms"];
+    this._platforms = json["platform"].cast<String>();
     this._technologies = technologies;
     this._accountType = accountType;
   }
