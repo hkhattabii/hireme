@@ -26,7 +26,7 @@ class SuggestionHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Flexible(
-            flex: 1,
+            flex: 2,
             child: Container(
               width: MediaQuery.of(context).size.width,
               child: RichText(
@@ -37,7 +37,7 @@ class SuggestionHeader extends StatelessWidget {
                       style: GoogleFonts.roboto(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 20)),
+                          fontSize: 16)),
                   TextSpan(
                       text: getRole(),
                       style: GoogleFonts.roboto(

@@ -6,14 +6,11 @@ class PlatformCards extends StatelessWidget {
   PlatformCards({this.platforms});
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      flex: 1,
-      child: Container(
-          child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: platforms.map((platform) => renderCard(context, platform)).toList()
-      )),
-    );
+    return Container(
+        child: Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: platforms.map((platform) => renderCard(context, platform)).toList()
+    ));
   }
 
   Container renderCard(BuildContext context, String platform) {

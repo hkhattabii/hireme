@@ -142,7 +142,7 @@ Step step3(BuildContext context, int currentStep) {
   return Step(
       isActive: currentStep == 2,
       title: Text(
-        'Informations professionel du candidat',
+        'Informations professionel recherché',
         style: GoogleFonts.roboto(
             color: Colors.white, fontWeight: FontWeight.bold),
       ),

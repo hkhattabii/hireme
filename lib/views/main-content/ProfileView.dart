@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hireme/blocs/authentication/authentication_bloc.dart';
 import 'package:hireme/blocs/profile/profile_bloc.dart';
 import 'package:hireme/models/Candidate.dart';
 import 'package:hireme/models/User.dart';
 import 'package:hireme/views/main-content/SettingsView.dart';
 import 'package:hireme/widgets/profile/PlatformCards.dart';
+import 'package:hireme/widgets/profile/TechnologyCards.dart';
 
 class ProfileView extends StatelessWidget {
   final User user;
@@ -20,7 +22,13 @@ class ProfileView extends StatelessWidget {
               )
             : Container(
                 child: Center(
-                  child: Text('Recruiter'),
+                  child: RaisedButton(
+                    child: Text('Logout'),
+                    onPressed: () {
+                      BlocProvider.of<AuthenticationBloc>(context)
+                          .add(SignOut());
+                    },
+                  ),
                 ),
               );
       },
@@ -54,21 +62,28 @@ class CandidateProfileView extends StatelessWidget {
           )
         ],
       ),
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            Flexible(
-              flex: 1,
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: NetworkImage(candidate.avatarURL),
-                        fit: BoxFit.cover)),
+      body: SingleChildScrollView(
+        child: Container(
+          child: Column(
+            children: <Widget>[
+              Container(
+                child: Container(
+                  width: double.infinity,
+                  height: 256,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: NetworkImage(candidate.avatarURL),
+                          fit: BoxFit.fill)),
+                ),
               ),
-            ),
-            PlatformCards(platforms: candidate.platforms)
-          ],
+              PlatformCards(platforms: candidate.platforms),
+              TechnologyCards(technologies: candidate.technologies),
+              Container(
+                width: double.infinity,
+                color: Colors.red,
+              )
+            ],
+          ),
         ),
       ),
     );
