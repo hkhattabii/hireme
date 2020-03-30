@@ -4,8 +4,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hireme/blocs/authentication/authentication_bloc.dart';
 import 'package:hireme/blocs/profile/profile_bloc.dart';
 import 'package:hireme/models/Candidate.dart';
+import 'package:hireme/models/Project.dart';
 import 'package:hireme/models/User.dart';
 import 'package:hireme/views/main-content/SettingsView.dart';
+import 'package:hireme/widgets/profile/PersonnalInformations.dart';
 import 'package:hireme/widgets/profile/PlatformCards.dart';
 import 'package:hireme/widgets/profile/TechnologyCards.dart';
 
@@ -78,9 +80,33 @@ class CandidateProfileView extends StatelessWidget {
               ),
               PlatformCards(platforms: candidate.platforms),
               TechnologyCards(technologies: candidate.technologies),
+              PersonalInformations(
+                experience: candidate.experience.toString(),
+                certificate: candidate.certificate,
+              ),
               Container(
                 width: double.infinity,
-                color: Colors.red,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'Projet',
+                      style: GoogleFonts.roboto(
+                          fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
+                    ListView.builder(
+                        itemCount: candidate.projects.length,
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext context, int index) {
+                          Project project = candidate.projects[index];
+                          return ListTile(
+                            title: Text(project.name),
+                            subtitle: Text(project.url),
+                            trailing: Icon(Icons.arrow_forward_ios),
+                          );
+                        })
+                  ],
+                ),
               )
             ],
           ),
