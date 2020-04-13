@@ -5,6 +5,7 @@ import 'package:hireme/blocs/authentication/authentication_bloc.dart';
 import 'package:hireme/blocs/profile/profile_bloc.dart';
 import 'package:hireme/models/Candidate.dart';
 import 'package:hireme/models/Project.dart';
+import 'package:hireme/models/Recruiter.dart';
 import 'package:hireme/models/User.dart';
 import 'package:hireme/views/main-content/SettingsView.dart';
 import 'package:hireme/widgets/profile/PersonnalInformations.dart';
@@ -18,100 +19,84 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileBloc, ProfileState>(
       builder: (BuildContext context, ProfileState) {
-        return user.accountType == AccountType.CANDIDATE
-            ? CandidateProfileView(
-                candidate: user,
-              )
-            : Container(
-                child: Center(
-                  child: RaisedButton(
-                    child: Text('Logout'),
-                    onPressed: () {
-                      BlocProvider.of<AuthenticationBloc>(context)
-                          .add(SignOut());
-                    },
-                  ),
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(user.accountType == AccountType.CANDIDATE
+                ? (user as Candidate).surname.toUpperCase() +
+                    ' ' +
+                    (user as Candidate).name +
+                    ', ' +
+                    (user as Candidate).role +
+                    ' dev'
+                : (user as Recruiter).companyName),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(
+                  Icons.settings,
+                  color: Theme.of(context).accentColor,
                 ),
-              );
-      },
-    );
-  }
-}
-
-class CandidateProfileView extends StatelessWidget {
-  final Candidate candidate;
-  CandidateProfileView({this.candidate});
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(candidate.surname.toUpperCase() +
-            ' ' +
-            candidate.name +
-            ', ' +
-            candidate.role +
-            ' dev'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.settings,
-              color: Theme.of(context).accentColor,
-            ),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SettingsView()));
-            },
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              Container(
-                child: Container(
-                  width: double.infinity,
-                  height: 256,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: NetworkImage(candidate.avatarURL),
-                          fit: BoxFit.fill)),
-                ),
-              ),
-              PlatformCards(platforms: candidate.platforms),
-              TechnologyCards(technologies: candidate.technologies),
-              PersonalInformations(
-                experience: candidate.experience.toString(),
-                certificate: candidate.certificate,
-              ),
-              Container(
-                width: double.infinity,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'Projet',
-                      style: GoogleFonts.roboto(
-                          fontWeight: FontWeight.bold, fontSize: 20),
-                    ),
-                    ListView.builder(
-                        itemCount: candidate.projects.length,
-                        shrinkWrap: true,
-                        itemBuilder: (BuildContext context, int index) {
-                          Project project = candidate.projects[index];
-                          return ListTile(
-                            title: Text(project.name),
-                            subtitle: Text(project.url),
-                            trailing: Icon(Icons.arrow_forward_ios),
-                          );
-                        })
-                  ],
-                ),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SettingsView()));
+                },
               )
             ],
           ),
-        ),
-      ),
+          body: SingleChildScrollView(
+            child: Container(
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    child: Container(
+                      width: double.infinity,
+                      height: 256,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: NetworkImage(user.avatarURL),
+                              fit: BoxFit.fill)),
+                    ),
+                  ),
+                  PlatformCards(platforms: user.platforms),
+                  TechnologyCards(technologies: user.technologies),
+                  PersonalInformations(
+                    experience: user.experience.toString(),
+                    certificate: user.certificate,
+                  ),
+                  user.accountType == AccountType.CANDIDATE
+                      ? Container(
+                          width: double.infinity,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Projet',
+                                style: GoogleFonts.roboto(
+                                    fontWeight: FontWeight.bold, fontSize: 20),
+                              ),
+                              ListView.builder(
+                                  itemCount:
+                                      (user as Candidate).projects.length,
+                                  shrinkWrap: true,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    Project project =
+                                        (user as Candidate).projects[index];
+                                    return ListTile(
+                                      title: Text(project.name),
+                                      subtitle: Text(project.url),
+                                      trailing: Icon(Icons.arrow_forward_ios),
+                                    );
+                                  })
+                            ],
+                          ),
+                        )
+                      : Container()
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
