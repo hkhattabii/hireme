@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hireme/models/Candidate.dart';
+import 'package:hireme/models/Notification.dart';
 import 'package:hireme/models/Recruiter.dart';
 import 'package:hireme/models/Table.dart';
 import 'package:hireme/models/User.dart';
@@ -53,6 +54,21 @@ class UserRepository with Table {
     return candidate;
   }
 
+
+  static Future<List<UserNotification>> getNotifications(String userID) async {
+    QuerySnapshot notificationSnapshot = await Firestore.instance
+    .collection("Notification")
+    .where("owner", isEqualTo: userID)
+    .getDocuments();
+
+    List<UserNotification> notifications = notificationSnapshot.documents
+    .map((document) => new UserNotification.fromJson(document.documentID, document.data)).toList();
+
+
+
+    return notifications;
+  }
+
 /*
  * Si les deux sont match, il ne se rencontreront jamais
  * Si un des deux sont match affiche seulement la personne qui a matché cette personne.
@@ -64,8 +80,7 @@ class UserRepository with Table {
         .where("senderID", isEqualTo: receiver.id)
         .getDocuments();
     if (isInterestMe.documents.isNotEmpty) {
-      //Si un ID existe c'est qu'il y'a un match, envoie de notificiation
-      print('MATCH');
+      //Si un ID existe c'est qu'il y'a un match, envoie une notificiation
       sendNotification(sender, receiver);
     }
 
@@ -78,27 +93,15 @@ class UserRepository with Table {
   static sendNotification(User sender, User receiver) {
     if (sender is Recruiter) {
       Firestore.instance.collection("Notification").document().setData({
-        "message": "Match avec " +
-            (receiver as Candidate).name +
-            " " +
-            (receiver as Candidate).surname,
-        "owner": sender.id,
-      });
-
-      Firestore.instance.collection("Notification").document().setData({
-        "message": "Match avec " + sender.companyName,
+        "message": sender.companyName + " a matché avec vous",
         "owner": receiver.id,
       });
     } else if (sender is Candidate) {
-      Firestore.instance.collection("Notification").document().setData({
-        "message": "Match avec " + (receiver as Recruiter).companyName,
-        "owner": sender.id,
-      });
-
-      Firestore.instance.collection("Notification").document().setData({
-        "message": "Match avec " + sender.name + " " + sender.surname,
+            Firestore.instance.collection("Notification").document().setData({
+        "message":  sender.name + " " + sender.surname + " a matché avec vous",
         "owner": receiver.id,
       });
+
     }
   }
 

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hireme/blocs/notification/notification_bloc.dart';
 import 'package:hireme/models/User.dart';
 import 'package:hireme/views/main-content/FeedView.dart';
 import 'package:hireme/views/main-content/NotificationView.dart';
@@ -71,6 +73,7 @@ class _MainContentState extends State<MainContent> {
                             : Colors.white,
                       ),
                       onPressed: () {
+                        BlocProvider.of<NotificationBloc>(context).add(LoadNotification(whoUseApp: user));
                         setState(() {
                           currentPage = 1;
                         });
