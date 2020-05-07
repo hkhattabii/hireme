@@ -269,8 +269,8 @@ onNextStep(BuildContext context, int currentStep) {
     BlocProvider.of<RegistrationBloc>(context).add(NextStep());
   } else {
     BlocProvider.of<RegistrationBloc>(context).add(SignUp());
+    Navigator.of(context).pop();
   }
-  Navigator.of(context).pop();
 }
 
 onTextFieldChange(BuildContext context, dynamic value, FieldName fieldName) {

@@ -13,7 +13,8 @@ import 'package:hireme/widgets/profile/TechnologyCards.dart';
 
 class ProfileView extends StatelessWidget {
   final User user;
-  ProfileView({this.user});
+  final User me;
+  ProfileView({this.user, this.me});
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileBloc, ProfileState>(
@@ -28,15 +29,7 @@ class ProfileView extends StatelessWidget {
                     (user as Candidate).role +
                     ' dev'
                 : (user as Recruiter).companyName),
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.exit_to_app),
-                color: Theme.of(context).accentColor,
-                onPressed: () {
-                  BlocProvider.of<AuthenticationBloc>(context).add(SignOut());
-                },
-              )
-            ],
+            actions: renderLogoutButton(context, user, me)
           ),
           body: SingleChildScrollView(
             child: Container(
@@ -94,5 +87,29 @@ class ProfileView extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+List<Widget> renderLogoutButton(BuildContext context, User user, User me) {
+  List<Widget> actions = new List();
+  print("USER : " + user.toString());
+  if (user == null) {
+    actions.add(IconButton(
+      icon: Icon(Icons.exit_to_app),
+      color: Theme.of(context).accentColor,
+      onPressed: () {
+        BlocProvider.of<AuthenticationBloc>(context).add(SignOut());
+      },
+    ));
+    return actions;
+  } else if (user.id == me.id) {
+    actions.add(IconButton(
+      icon: Icon(Icons.exit_to_app),
+      color: Theme.of(context).accentColor,
+      onPressed: () {
+        BlocProvider.of<AuthenticationBloc>(context).add(SignOut());
+      },
+    ));
+    return actions;
   }
 }

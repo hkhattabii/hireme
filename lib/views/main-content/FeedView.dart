@@ -31,7 +31,7 @@ class FeedView extends StatelessWidget {
                   height: MediaQuery.of(context).size.height,
                   child: Column(children: [
                     SuggestionCard(
-                        usersSuggestion: feedState.userSuggestions, user: user),
+                        usersSuggestion: feedState.userSuggestions, me: user),
                     InterestButton(user: user)
                   ]),
                 ),

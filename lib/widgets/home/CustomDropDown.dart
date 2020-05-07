@@ -14,7 +14,7 @@ class CustomDropDown extends StatelessWidget {
       String certificateValue = (state as CandidateRegistration).certificate;
       return DropdownButtonFormField(
           style: GoogleFonts.roboto(
-              color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+              color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
           value: certificateValue,
           decoration: InputDecoration(
               labelText: label,

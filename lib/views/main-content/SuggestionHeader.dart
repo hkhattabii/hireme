@@ -30,7 +30,7 @@ class SuggestionHeader extends StatelessWidget {
             child: Container(
               width: MediaQuery.of(context).size.width,
               child: RichText(
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.left,
                 text: TextSpan(children: [
                   TextSpan(
                       text: getName(),

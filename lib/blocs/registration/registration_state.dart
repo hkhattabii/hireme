@@ -24,6 +24,7 @@ class CandidateRegistration extends RegistrationState {
   final List<Project> projects;
   final List<Technology> technologies;
   final File image;
+  bool showError;
 
   CandidateRegistration(
       {this.accountType,
@@ -39,7 +40,8 @@ class CandidateRegistration extends RegistrationState {
       this.platforms,
       this.projects,
       this.technologies,
-      this.image});
+      this.image,
+      this.showError});
 
   //Met à jour le state, tout en gardant les données en verifiant s'ils doivent être ecrasé ou pas.
   CandidateRegistration update(
