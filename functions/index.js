@@ -12,9 +12,10 @@ exports.messageTrigger = functions.firestore.document('Notification/{notificatio
     let token = ''
     const notification = snapshot.data()
     const candidateSnapshot = await admin.firestore().collection('Candidate').doc(notification.owner).get()
+    let recruiterSnapshot = undefined;
     console.log(candidateSnapshot.data())
     if (candidateSnapshot.data() === undefined) {
-        const recruiterSnapshot = await admin.firestore().collection('Recruiter').doc(notification.owner).get()
+        recruiterSnapshot = await admin.firestore().collection('Recruiter').doc(notification.owner).get()
         token = recruiterSnapshot.get('token')
     } else {
         token = candidateSnapshot.get('token')
@@ -28,7 +29,8 @@ exports.messageTrigger = functions.firestore.document('Notification/{notificatio
         notification: {
             title: 'MATCH !',
             body: notification.message,
-            sound: 'default'
+            sound: 'default',
+            clickAction: 'FLUTTER_NOTIFICATION_CLICK'
         }
     }
 

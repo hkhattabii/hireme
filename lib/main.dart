@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hireme/blocs/authentication/authentication_bloc.dart';
@@ -50,12 +53,25 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(body: Center(
       child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
+          FirebaseMessaging fcm = new FirebaseMessaging();
+          fcm.configure(onMessage: (Map<String, dynamic> message) async {
+            print('onMessage: $message');
+          }, onLaunch: (Map<String, dynamic> message) async {
+            print('onLaunch: $message');
+          }, onResume: (Map<String, dynamic> message) async {
+            print('onResume: $message');
+          });
+          if (Platform.isIOS) {
+            fcm.requestNotificationPermissions(IosNotificationSettings());
+          }
           if (state is Uninitialized) {
             return CircularProgressIndicator();
           } else if (state is Unauthenticated) {
             return LoginView(state: state);
           } else if (state is Authenticated) {
-            BlocProvider.of<FeedBloc>(context).add(LoadUser(whoUseApp: state.user)); //une fois connecté, recupère la liste des candidat ou recruteur
+            BlocProvider.of<FeedBloc>(context).add(LoadUser(
+                whoUseApp: state
+                    .user)); //une fois connecté, recupère la liste des candidat ou recruteur
             return MainContent(user: state.user);
           }
           return Container();
