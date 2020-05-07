@@ -39,4 +39,8 @@ class User {
   List<Technology> get technologies => _technologies;
   AccountType get accountType => _accountType;
   Map<String, double> get location => _location;
+
+  void set token(String token) {
+    _token = token;
+  }
 }

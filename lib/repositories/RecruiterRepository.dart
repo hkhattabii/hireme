@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:hireme/blocs/registration/registration_bloc.dart';
 import 'package:hireme/models/Candidate.dart';
@@ -12,9 +13,6 @@ import 'package:hireme/models/User.dart';
 import 'package:hireme/repositories/CandidateRepository.dart';
 
 class RecruiterRepository with Table {
-
-
-
   static void signUp(CandidateRegistration candidateRegistration) async {
     final String fileName = Random().nextInt(10000).toString() +
         "-" +
@@ -39,6 +37,9 @@ class RecruiterRepository with Table {
 
     final DocumentReference candidateRef =
         Table.createDocument("Recruiter", user.uid);
+
+    final FirebaseMessaging fcm = new FirebaseMessaging();
+    final String fcmToken = await fcm.getToken();
     Table.insertDataInExistingDocument("Recruiter", candidateRef.documentID, {
       'avatarURL': avatarURL,
       'experience': candidateRegistration.experience,
@@ -48,6 +49,7 @@ class RecruiterRepository with Table {
       'role': candidateRegistration.role,
       'platform': candidateRegistration.platforms,
       'certificate': candidateRegistration.certificate,
+      'token': fcmToken
     });
   }
 

@@ -22,6 +22,12 @@ class NotificationView extends StatelessWidget {
               onMessage: (Map<String, dynamic> message) async {
                 print('onMessage: $message');
               },
+              onLaunch: (Map<String, dynamic> message) async {
+                print('onMessage: $message');
+              },
+              onResume: (Map<String, dynamic> message) async {
+                print('onMessage: $message');
+              }
             );
             fcm.requestNotificationPermissions(IosNotificationSettings());
             return ListView.separated(

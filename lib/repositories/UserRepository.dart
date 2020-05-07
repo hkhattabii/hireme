@@ -54,15 +54,33 @@ class UserRepository with Table {
     Candidate candidate =
         await CandidateRepository.retrieveCandidateData(userID, null);
 
-    if (candidate == null)
-      return await RecruiterRepository.retrieveRecruiterData(userID, null);
-    
+    if (candidate == null) {
+      Recruiter recruiter =
+          await RecruiterRepository.retrieveRecruiterData(userID, null);
+      if (fcmToken != null) {
+        QuerySnapshot userSnapshot = await Firestore.instance
+            .collection("Recruiter")
+            .where("token", isEqualTo: recruiter.token)
+            .getDocuments();
+        userSnapshot.documents.forEach((document) => {
+              document.reference
+                  .updateData(<String, dynamic>{'token': fcmToken})
+            });
+        recruiter.token = fcmToken;
+        print("HOLAAAAAA");
+      }
+      return recruiter;
+    }
+
     if (fcmToken != null && fcmToken != candidate.token) {
-          print('TOKEN GENERATE : ' + fcmToken);
-      QuerySnapshot userSnapshot = await Firestore.instance.collection("Candidate").where("token", isEqualTo: candidate.token).getDocuments();
+      QuerySnapshot userSnapshot = await Firestore.instance
+          .collection("Candidate")
+          .where("token", isEqualTo: candidate.token)
+          .getDocuments();
       userSnapshot.documents.forEach((document) => {
-        document.reference.updateData(<String, dynamic>{'token': fcmToken})
-      });
+            document.reference.updateData(<String, dynamic>{'token': fcmToken})
+          });
+      candidate.token = fcmToken;
     }
     return candidate;
   }

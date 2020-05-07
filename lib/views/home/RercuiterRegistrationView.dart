@@ -121,12 +121,12 @@ Step step2(BuildContext context, int currentStep) {
           CustomTextField(
               label: "Nom",
               onChange: (text) {
-                onTextFieldChange(context, text, FieldName.SURNAME);
+                onTextFieldChange(context, text, FieldName.NAME);
               }),
           CustomTextField(
               label: "Siège Social",
               onChange: (text) {
-                onTextFieldChange(context, text, FieldName.NAME);
+                onTextFieldChange(context, text, FieldName.SURNAME);
               }),
           CustomDropDown(
             label: 'Diplôme recherché',
