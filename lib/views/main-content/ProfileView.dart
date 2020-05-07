@@ -7,7 +7,6 @@ import 'package:hireme/models/Candidate.dart';
 import 'package:hireme/models/Project.dart';
 import 'package:hireme/models/Recruiter.dart';
 import 'package:hireme/models/User.dart';
-import 'package:hireme/views/main-content/SettingsView.dart';
 import 'package:hireme/widgets/profile/PersonnalInformations.dart';
 import 'package:hireme/widgets/profile/PlatformCards.dart';
 import 'package:hireme/widgets/profile/TechnologyCards.dart';
@@ -19,7 +18,6 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileBloc, ProfileState>(
       builder: (BuildContext context, ProfileState) {
-        print('USER TOKEN : ${user.token}');
         return Scaffold(
           appBar: AppBar(
             title: Text(user.accountType == AccountType.CANDIDATE
@@ -32,13 +30,10 @@ class ProfileView extends StatelessWidget {
                 : (user as Recruiter).companyName),
             actions: <Widget>[
               IconButton(
-                icon: Icon(
-                  Icons.settings,
-                  color: Theme.of(context).accentColor,
-                ),
+                icon: Icon(Icons.exit_to_app),
+                color: Theme.of(context).accentColor,
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => SettingsView()));
+                  BlocProvider.of<AuthenticationBloc>(context).add(SignOut());
                 },
               )
             ],

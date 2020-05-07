@@ -35,7 +35,7 @@ class AuthenticationBloc
     if (user != null) {
       yield Authenticated(user: user);
     } else {
-      yield Unauthenticated(email: '', password: '');
+      yield Unauthenticated();
     }
   }
 
@@ -49,17 +49,17 @@ class AuthenticationBloc
   }
 
   Stream<AuthenticationState> _mapSignInToState(SignIn event) async* {
+    print("FORM : " + event.email + " " +  event.password);
     try {
-      yield Uninitialized();
       User user = await UserRepository.signIn(event.email, event.password);
       yield Authenticated(user: user);
     } catch (e) {
-      yield Unauthenticated(email: '', password: '');
+      yield Unauthenticated(error: e, showError: true);
     }
   }
 
   Stream<AuthenticationState> _mapSignOutToState() async* {
     UserRepository.signOut();
-    yield Unauthenticated(email: '', password: '');
+    yield Unauthenticated();
   }
 }

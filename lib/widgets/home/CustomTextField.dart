@@ -5,18 +5,24 @@ class CustomTextField extends StatelessWidget {
   final String label;
   final TextInputType keyboardType;
   final Function onChange;
-  CustomTextField({this.label = "", this.keyboardType, this.onChange});
+  final TextEditingController textEditingController;
+  CustomTextField(
+      {this.label = "",
+      this.keyboardType,
+      this.onChange,
+      this.textEditingController});
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+        controller: textEditingController,
         enableSuggestions: false,
         autocorrect: false,
         keyboardType: keyboardType,
         obscureText:
             keyboardType == TextInputType.visiblePassword ? true : false,
         onChanged: (text) {
-          onChange(text);
+            onChange(text);
         },
         decoration: InputDecoration(
             labelText: this.label,

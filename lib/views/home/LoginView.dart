@@ -10,6 +10,15 @@ class LoginView extends StatelessWidget {
   LoginView({this.state});
   @override
   Widget build(BuildContext context) {
+    if (state.error != null && state.showError == true) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final snackBar = SnackBar(content: Text(state.error));
+        Scaffold.of(context).showSnackBar(snackBar);
+        state.showError = false;
+      });
+    } 
+    var emailController = TextEditingController();
+    var passwordController = TextEditingController();
     return Container(
       width: double.infinity,
       height: double.infinity,
@@ -38,13 +47,13 @@ class LoginView extends StatelessWidget {
               CustomTextField(
                 label: 'Email',
                 keyboardType: TextInputType.emailAddress,
-                onChange: (email) => onEmailChanged(context, email),
+                textEditingController: emailController
               ),
               SizedBox(height: 16),
               CustomTextField(
                 label: 'Mot de passe',
-                keyboardType: TextInputType.emailAddress,
-                onChange: (email) => onPasswordChanged(context, email),
+                keyboardType: TextInputType.visiblePassword,
+                textEditingController: passwordController,
               ),
               RaisedButton(
                 child: Text(
@@ -57,7 +66,7 @@ class LoginView extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8)),
                 elevation: 4,
                 onPressed: () {
-                  onSignIn(context, state.password, state.email);
+                  onSignIn(context, emailController, passwordController);
                 },
               )
             ],
@@ -77,7 +86,7 @@ class LoginView extends StatelessWidget {
                       color: Colors.white, fontWeight: FontWeight.bold),
                 ),
                 onPressed: () {
-                  goToSignUp(context);
+                  goToSignUp(context, state);
                 },
               )
             ],
@@ -87,22 +96,15 @@ class LoginView extends StatelessWidget {
     );
   }
 
-  goToSignUp(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => RegistrationView()));
+  goToSignUp(BuildContext context, Unauthenticated state) {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => RegistrationView(unauthenticatedState: state,)));
   }
 
-  onSignIn(BuildContext context, String password, String email) {
+  onSignIn(BuildContext context, TextEditingController emailController, TextEditingController passwordController) {
     BlocProvider.of<AuthenticationBloc>(context)
-        .add(SignIn(email: email, password: password));
-  }
-
-  onEmailChanged(BuildContext context, String email) {
-    BlocProvider.of<AuthenticationBloc>(context)
-        .add(EmailChanged(email: email));
-  }
-
-  onPasswordChanged(BuildContext context, String password) {
-    BlocProvider.of<AuthenticationBloc>(context)
-        .add(PasswordChanged(password: password));
+        .add(SignIn(email: emailController.text, password: passwordController.text));
+    emailController.clear();
+    passwordController.clear();
   }
 }

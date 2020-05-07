@@ -17,21 +17,26 @@ class Authenticated extends AuthenticationState {
 }
 
 class Unauthenticated extends AuthenticationState {
-  final String email;
-  final String password;
   final String error;
-  Unauthenticated({this.email, this.password, this.error});
+  bool showError;
+  Unauthenticated({this.error, this.showError});
 
   @override
-  List<Object> get props => [email, password, error];
+  List<Object> get props => [error, showError];
+
 
   Unauthenticated update({String email, String password, String error}) =>
       copyWith(email: email, password: password, error: error);
 
   Unauthenticated copyWith({String email, String password, String error}) {
     return Unauthenticated(
-        email: email ?? this.email,
-        password: password ?? this.password,
         error: error ?? this.error);
+  }
+
+  @override
+  String toString() {
+    return {  
+      'error': error
+    }.toString();
   }
 }

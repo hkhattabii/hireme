@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hireme/blocs/authentication/authentication_bloc.dart';
 import 'package:hireme/blocs/registration/registration_bloc.dart';
 import 'package:hireme/widgets/home/CustomDropDown.dart';
 import 'package:hireme/widgets/home/CustomTextField.dart';
@@ -12,8 +13,17 @@ import 'package:hireme/widgets/home/TechnologyDialog.dart';
 import 'package:image_picker_gallery_camera/image_picker_gallery_camera.dart';
 
 class CandidateRegistrationView extends StatelessWidget {
+  final Unauthenticated state;
+  CandidateRegistrationView({this.state});
   @override
   Widget build(BuildContext context) {
+    if (state.error != null && state.showError == true) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final snackBar = SnackBar(content: Text(state.error));
+        Scaffold.of(context).showSnackBar(snackBar);
+        state.showError = false;
+      });
+    }
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -255,9 +265,12 @@ uploadImage(BuildContext context, File image) {
 }
 
 onNextStep(BuildContext context, int currentStep) {
-  currentStep < 3
-      ? BlocProvider.of<RegistrationBloc>(context).add(NextStep())
-      : BlocProvider.of<RegistrationBloc>(context).add(SignUp());
+  if (currentStep < 3) {
+    BlocProvider.of<RegistrationBloc>(context).add(NextStep());
+  } else {
+    BlocProvider.of<RegistrationBloc>(context).add(SignUp());
+  }
+  Navigator.of(context).pop();
 }
 
 onTextFieldChange(BuildContext context, dynamic value, FieldName fieldName) {
