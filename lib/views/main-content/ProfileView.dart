@@ -19,6 +19,7 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileBloc, ProfileState>(
       builder: (BuildContext context, ProfileState) {
+        print('USER TOKEN : ${user.token}');
         return Scaffold(
           appBar: AppBar(
             title: Text(user.accountType == AccountType.CANDIDATE

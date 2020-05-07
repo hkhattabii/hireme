@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:hireme/models/Candidate.dart';
 import 'package:hireme/models/Notification.dart';
 import 'package:hireme/models/Recruiter.dart';
@@ -15,6 +16,7 @@ class UserRepository with Table {
    */
   static Future<User> getCurrentUser() async {
     FirebaseUser firebaseUser = await FirebaseAuth.instance.currentUser();
+    print('FIREBASEUSER: $firebaseUser');
     if (firebaseUser == null) {
       return null;
     }
@@ -47,24 +49,34 @@ class UserRepository with Table {
   * il va donc aller le chercher dans la base de donnée
  */
   static Future<User> getAccountDependingOnType(String userID) async {
+    final FirebaseMessaging fcm = new FirebaseMessaging();
+    final String fcmToken = await fcm.getToken();
     Candidate candidate =
         await CandidateRepository.retrieveCandidateData(userID, null);
+
     if (candidate == null)
       return await RecruiterRepository.retrieveRecruiterData(userID, null);
+    
+    if (fcmToken != null && fcmToken != candidate.token) {
+          print('TOKEN GENERATE : ' + fcmToken);
+      QuerySnapshot userSnapshot = await Firestore.instance.collection("Candidate").where("token", isEqualTo: candidate.token).getDocuments();
+      userSnapshot.documents.forEach((document) => {
+        document.reference.updateData(<String, dynamic>{'token': fcmToken})
+      });
+    }
     return candidate;
   }
 
-
   static Future<List<UserNotification>> getNotifications(String userID) async {
     QuerySnapshot notificationSnapshot = await Firestore.instance
-    .collection("Notification")
-    .where("owner", isEqualTo: userID)
-    .getDocuments();
+        .collection("Notification")
+        .where("owner", isEqualTo: userID)
+        .getDocuments();
 
     List<UserNotification> notifications = notificationSnapshot.documents
-    .map((document) => new UserNotification.fromJson(document.documentID, document.data)).toList();
-
-
+        .map((document) =>
+            new UserNotification.fromJson(document.documentID, document.data))
+        .toList();
 
     return notifications;
   }
@@ -97,11 +109,10 @@ class UserRepository with Table {
         "owner": receiver.id,
       });
     } else if (sender is Candidate) {
-            Firestore.instance.collection("Notification").document().setData({
-        "message":  sender.name + " " + sender.surname + " a matché avec vous",
+      Firestore.instance.collection("Notification").document().setData({
+        "message": sender.name + " " + sender.surname + " a matché avec vous",
         "owner": receiver.id,
       });
-
     }
   }
 

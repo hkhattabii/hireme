@@ -7,11 +7,13 @@ class User {
   String _avatarURL;
   String _role;
   String _certificate;
+  String _token;
   int _experience;
   List<String> _platforms;
   List<Technology> _technologies;
   AccountType _accountType;
   Map<String, double> _location;
+
 
   User.fromJson(
       String documentID, Map<String, dynamic> json, AccountType accountType, List<Technology> technologies) {
@@ -19,6 +21,7 @@ class User {
     this._avatarURL = json["avatarURL"];
     this._role = json["role"];
     this._certificate = json["certificate"];
+    this._token = json["token"];
     this._experience = json["experience"];
     this._platforms = json["platform"].cast<String>();
     this._technologies = technologies;
@@ -30,6 +33,7 @@ class User {
   String get avatarURL => _avatarURL;
   String get role => _role;
   String get certificate => _certificate;
+  String get token => _token;
   int get experience => _experience;
   List<String> get platforms => _platforms;
   List<Technology> get technologies => _technologies;

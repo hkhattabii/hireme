@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:hireme/blocs/registration/registration_bloc.dart';
 import 'package:hireme/models/Candidate.dart';
@@ -12,6 +13,7 @@ import 'package:hireme/models/User.dart';
 import 'package:hireme/repositories/RecruiterRepository.dart';
 
 class CandidateRepository with Table {
+
   static void signUp(CandidateRegistration candidateRegistration) async {
     final String fileName = Random().nextInt(10000).toString() +
         "-" +
@@ -39,6 +41,9 @@ class CandidateRepository with Table {
                 "Project", {'name': project.name, 'url': project.url}))
             .toList());
 
+    final FirebaseMessaging fcm = new FirebaseMessaging();
+    final String fcmToken = await fcm.getToken();
+
     final DocumentReference candidateRef =
         Table.createDocument("Candidate", user.uid);
     Table.insertDataInExistingDocument("Candidate", candidateRef.documentID, {
@@ -50,9 +55,15 @@ class CandidateRepository with Table {
       'role': candidateRegistration.role,
       'platform': candidateRegistration.platforms,
       'certificate': candidateRegistration.certificate,
-      'projects': projectsDoc
+      'projects': projectsDoc,
+      'token': fcmToken
     });
   }
+
+
+
+
+
 
   static Future<User> retrieveCandidateData(
       String uid, DocumentSnapshot userSnap) async {

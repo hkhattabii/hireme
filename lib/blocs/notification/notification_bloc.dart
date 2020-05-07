@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:hireme/models/Notification.dart';
 import 'package:hireme/models/User.dart';
 import 'package:hireme/repositories/UserRepository.dart';

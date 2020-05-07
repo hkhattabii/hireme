@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hireme/blocs/notification/notification_bloc.dart';
@@ -16,24 +17,32 @@ class NotificationView extends StatelessWidget {
             return Center(child: CircularProgressIndicator());
           } else if (state is NotificationStateInitialized) {
             List<UserNotification> notifications = state.notifications;
-            return ListView.separated(
-              itemCount: notifications.length,
-              itemBuilder: (BuildContext context, int index) {
-                UserNotification notification = notifications[index];
-                return ListTile(
-                  title: Text(notification.message),
-                  trailing: IconButton(
-                    icon: Icon(
-                      Icons.delete,
-                      color: Colors.red,
-                    ),
-                    onPressed: () {
-                      print("delete notification");
-                    },
-                  ),
-                );
-              }, separatorBuilder: (BuildContext context, int index) => Divider(color: Colors.black)
+            FirebaseMessaging fcm = new FirebaseMessaging();
+            fcm.configure(
+              onMessage: (Map<String, dynamic> message) async {
+                print('onMessage: $message');
+              },
             );
+            fcm.requestNotificationPermissions(IosNotificationSettings());
+            return ListView.separated(
+                itemCount: notifications.length,
+                itemBuilder: (BuildContext context, int index) {
+                  UserNotification notification = notifications[index];
+                  return ListTile(
+                    title: Text(notification.message),
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ),
+                      onPressed: () {
+                        print("delete notification");
+                      },
+                    ),
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) =>
+                    Divider(color: Colors.black));
           }
           return Container();
         }));
