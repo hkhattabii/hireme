@@ -21,7 +21,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       yield* _mapLikeUserState(event);
     } else if (event is UnlikeUser) {
       yield* _mapUnlikeUserState(event);
-    }
+    } 
   }
 
   Stream<FeedState> _mapLoadUserState(LoadUser event) async* {
@@ -72,4 +72,6 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
           userSuggesting: userSuggestionUpdated[0]);
     }
   }
+
+
 }

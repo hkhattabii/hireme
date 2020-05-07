@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hireme/blocs/feed/feed_bloc.dart';
 
 class InterestButton extends StatelessWidget {
+  final user;
+  InterestButton({this.user});
   @override
   Widget build(BuildContext context) {
     return Flexible(
@@ -28,10 +30,24 @@ class InterestButton extends StatelessWidget {
                 ),
               ),
               CircleAvatar(
+                radius: 16,
+                backgroundColor: Theme.of(context).accentColor,
+                child: IconButton(
+                  onPressed: () {
+                    BlocProvider.of<FeedBloc>(context).add(LoadUser(whoUseApp: user));
+                  },
+                  icon: Icon(
+                    Icons.replay,
+                    color: Colors.white,
+                    size: 16,
+                  ),
+                ),
+              ),
+              CircleAvatar(
                   radius: 32,
                   child: IconButton(
                       onPressed: () {
-                        BlocProvider.of<FeedBloc>(context).add(UnlikeUser());
+                        BlocProvider.of<FeedBloc>(context).add(LikeUser(sender: user));
                       },
                       icon:
                           Icon(Icons.favorite, color: Colors.white, size: 32))),
